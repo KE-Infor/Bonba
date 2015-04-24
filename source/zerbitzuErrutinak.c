@@ -18,9 +18,6 @@ void tekEten ()
 		EGOERA=1;
 		ErlojuaMartxanJarri();
 		iprintf("\x1b[13;5HPasa diren segunduak=0");
-		erakutsiAteaIrekita();
-		ErakutsiErronboa(1, 5, 5);
-		ErakutsiErronboHandia(2, 100, 100);
 	}
 }
 
@@ -39,11 +36,8 @@ void tenpEten()
 			tik=0;
 			if (seg==3)
 			{
-				erakutsiAtea();
 				seg=0;
 				EGOERA=0;
-				EzabatuErronboa(1, 5, 5);
-				EzabatuErronboHandia(2, 100, 100);
 			}				
 		}
 	}
