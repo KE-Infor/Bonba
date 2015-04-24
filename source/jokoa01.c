@@ -34,6 +34,7 @@ adibide batean oinarrituta.
 int get_kable(int px, int py);
 char* kable_izena(int kablea);
 void reset();
+void aldatu_spritea(int kable);
 
 int offseta[10] =
 {
@@ -43,6 +44,8 @@ int offseta[10] =
 	OFFSET_X_MOREA,
 	OFFSET_X_HORIA,
 };
+
+int piztuta[5] = {0, 0, 0, 0, 0};
 
 void jokoa01()
 {
@@ -58,6 +61,8 @@ void jokoa01()
 	erakutsiFondoa();
 
 	int kable_ona = rand() % 5; // 0-4 tarteko zenbaki bat
+
+	int last_kable = -1;
 	iprintf("\x1b[5;2HKable ona: %s", kable_izena(kable_ona));
 	while(1)
 	{
@@ -67,14 +72,30 @@ void jokoa01()
 		int kablea = get_kable(px, py);
 		if(kablea != -1)
 		{
+			if(kablea == last_kable) continue;
+			else last_kable = kablea;
 			iprintf("\x1b[7;2HKlikatutako kablea: %s      ", kable_izena(kablea));
-			
-			ErakutsiSpritea(kablea, offseta[kablea], OFFSET_Y);
+			aldatu_spritea(kablea);
 		}
 		else
 		{
+			last_kable = -1;
 			iprintf("\x1b[7;2H                                ");
 		}
+	}
+}
+
+void aldatu_spritea(int kablea)
+{
+	if(piztuta[kablea] == 1)
+	{
+		EzabatuSpritea(kablea, offseta[kablea], OFFSET_Y); 
+		piztuta[kablea] = 0;
+	}
+	else
+	{
+		ErakutsiSpritea(kablea, offseta[kablea], OFFSET_Y);
+		piztuta[kablea] = 1;
 	}
 }
 
