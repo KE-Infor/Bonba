@@ -7,12 +7,15 @@ adibide batean oinarrituta.
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-	
+#include <stdarg.h>
+
 #include "definizioak.h"
 #include "periferikoak.h"
 #include "zerbitzuErrutinak.h"
 #include "fondoak.h"
 #include "spriteak.h"
+#include "egoera.h"
+#include "lagungarriak.h"
 
 #define OFFSET_Y 80
 #define OFFSET_X_GORRIA 65
@@ -34,7 +37,8 @@ adibide batean oinarrituta.
 int get_kable(int px, int py);
 char* kable_izena(int kablea);
 void reset();
-void aldatu_spritea(int kable);
+void erakutsi_spritea(int kable);
+void init();
 
 int offseta[10] =
 {
@@ -49,73 +53,108 @@ int piztuta[5] = {0, 0, 0, 0, 0};
 
 void jokoa01()
 {
-	IME = 1;
-	konfiguratuTeklatua(0x00004001);
-	konfiguratuTenporizadorea(39322,0x00000042);
-	TekEtenBaimendu();
-	DenbEtenBaimendu();
-	etenZerbErrutEzarri();
+	init();
 
 	srand(time(NULL));
 
 	erakutsiFondoa();
 
 	int kable_ona = rand() % 5; // 0-4 tarteko zenbaki bat
-
-	int last_kable = -1;
-	iprintf("\x1b[5;2HKable ona: %s", kable_izena(kable_ona));
-	while(1)
+	while (1)
 	{
-		touchRead(&PANT_DAT);
-		int px = PANT_DAT.px;
-		int py = PANT_DAT.py;
-		int kablea = get_kable(px, py);
-		if(kablea != -1)
+		if(EGOERA == EGOERA_HASIERA)
 		{
-			if(kablea == last_kable) continue;
-			else last_kable = kablea;
-			iprintf("\x1b[7;2HKlikatutako kablea: %s      ", kable_izena(kablea));
-			aldatu_spritea(kablea);
+			iprintf("\x1b[5;2HA tekla sakatu jokoa hasteko     ");
+
+			iprintf("\x1b[8;2HJokoa hasten denean, 10      ");
+			iprintf("\x1b[9;2Hsegundu edukiko dituzu bonba    ");
+			iprintf("\x1b[10;2Hdesaktibatzeko kable egokia    ");
+			iprintf("\x1b[11;2Hmoztuz. Zorte on!     ");
 		}
-		else
+		else if (EGOERA == EGOERA_JOLASTEN)
 		{
-			last_kable = -1;
-			iprintf("\x1b[7;2H                                ");
+			touchRead(&PANT_DAT);
+			int px = PANT_DAT.px;
+			int py = PANT_DAT.py;
+			int kablea = get_kable(px, py);
+			if (kablea != -1)
+			{
+				erakutsi_spritea(kablea);
+				if(kablea == kable_ona) EGOERA = EGOERA_IRABAZITA;
+				else EGOERA = EGOERA_GALDUTA;
+			}
+		}
+		else if (EGOERA == EGOERA_GALDUTA)
+		{
+			iprintf("\x1b[5;0H     BOOOOOOMMMMM!!!       ");
+
+			iprintf("\x1b[8;0H     Bonba lehertu egin da!");
+
+			iprintf("\x1b[10;0H   Sakatu A kable berdinerako");
+			iprintf("\x1b[11;0H  Sakatu B kable berri baterako");
+		}
+		else if (EGOERA == EGOERA_IRABAZITA)
+		{
+			iprintf("\x1b[5;0H           ZORIONAK!!!          ");
+
+			iprintf("\x1b[8;0H     Bonba desaktibatu duzu!");
+
+			iprintf("\x1b[10;0H   Sakatu A kable berdinerako");
+			iprintf("\x1b[11;0H  Sakatu B kable berri baterako");
+
+			ezabatu_lerroa(13);
+		}
+		else if (EGOERA == EGOERA_RESET_BERDIN)
+		{
+			reset();
+		}
+		else if (EGOERA == EGOERA_RESET_BERRI)
+		{
+			kable_ona = rand() % 5;
+			reset();
 		}
 	}
 }
 
-void aldatu_spritea(int kablea)
+void init()
 {
-	if(piztuta[kablea] == 1)
-	{
-		EzabatuSpritea(kablea, offseta[kablea], OFFSET_Y); 
-		piztuta[kablea] = 0;
-	}
-	else
-	{
-		ErakutsiSpritea(kablea, offseta[kablea], OFFSET_Y);
-		piztuta[kablea] = 1;
-	}
+	IME = 1;
+	konfiguratuTeklatua(0x00004003);
+	konfiguratuTenporizadorea(39322, 0x00000042);
+	TekEtenBaimendu();
+	DenbEtenBaimendu();
+	etenZerbErrutEzarri();
+}
+
+void erakutsi_spritea(int kablea)
+{
+	ErakutsiSpritea(kablea, offseta[kablea], OFFSET_Y);
+	piztuta[kablea] = 1;
 }
 
 void reset()
 {
+	ezabatu_pantaila();
 	int i;
-	for(i = 0; i<5; i++) EzabatuSpritea(i, offseta[i], OFFSET_Y);
+	for (i = 0; i < 5; i++)
+	{
+		EzabatuSpritea(i, offseta[i], OFFSET_Y);
+		piztuta[i] = 0;
+	}
+	EGOERA = EGOERA_HASIERA;
 }
 
 int get_kable(int px, int py)
 {
-	if(py < Y_MAX && py > Y_MIN)
+	if (py < Y_MAX && py > Y_MIN)
 	{
-		if(px > X_MIN && px < HORIA_MAX)
+		if (px > X_MIN && px < HORIA_MAX)
 		{
-			if(px < GORRIA_MAX) return GORRIA;
-			else if(px < BERDEA_MAX) return BERDEA;
-			else if(px < URDINA_MAX) return URDINA;
-			else if(px < MOREA_MAX) return MOREA;
-			else if(px < HORIA_MAX) return HORIA;
+			if (px < GORRIA_MAX) return GORRIA;
+			else if (px < BERDEA_MAX) return BERDEA;
+			else if (px < URDINA_MAX) return URDINA;
+			else if (px < MOREA_MAX) return MOREA;
+			else if (px < HORIA_MAX) return HORIA;
 		}
 	}
 	return -1;
@@ -123,10 +162,10 @@ int get_kable(int px, int py)
 
 char* kable_izena(int kablea)
 {
-	if(kablea == GORRIA) return "GORRIA";
-	else if(kablea == BERDEA) return "BERDEA";
-	else if(kablea == URDINA) return "URDINA";
-	else if(kablea == MOREA) return "MOREA";
-	else if(kablea == HORIA) return "HORIA";
+	if (kablea == GORRIA) return "GORRIA";
+	else if (kablea == BERDEA) return "BERDEA";
+	else if (kablea == URDINA) return "URDINA";
+	else if (kablea == MOREA) return "MOREA";
+	else if (kablea == HORIA) return "HORIA";
 	else return "ERROREA!";
 }

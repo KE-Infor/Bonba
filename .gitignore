@@ -8,6 +8,7 @@
 *.arm9
 *.map
 *.stackdump
+gfx/sprite/
 
 # Libraries
 *.lib
