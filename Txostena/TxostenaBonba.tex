@@ -2,6 +2,7 @@
 
 \usepackage{array}
 \usepackage{arydshln}
+\usetikzlibrary{arrows}
 
 \makeatletter
 \renewcommand*\env@matrix[1][*\c@MaxMatrixCols c]{%
@@ -43,29 +44,31 @@ Ebazpenerako pentsatu dugun atea zeran datza: Ukimen pantailan bonba bat agertuk
 
 \section{Kontzeptu-mapa}
 
-\begin{tikzpicture}
-\node(0) at (3,0)[shape=circle,draw]	{$HASIERA$};
-\node(1) at (3,4)[shape=circle,draw]    {$JOLASTEN$};
-\node(2) at (0,8)[shape=circle,draw]    {$GALDUTA$};
-\node(3) at (6,8)[shape=circle,draw]	{$IRABAZITA$};
-\node(4) at (0,12)[shape=circle,draw]	{$RESET$};
-\node(5) at (6,12)[shape=circle,draw]	{$RESET\_BERRI$};
-\path [->]
-  (0) edge node [above, preaction={fill, white}, yshift=-25] {$\begin{array}{c}
+\begin{tikzpicture}[y=-1cm, scale=0.9448, every node/.style={scale=0.9448}]
+\node(pseudo) at (-1,-2){};
+\node(0) at (3,-1)	[shape=circle,draw, ultra thick]	{$HASIERA$};
+\node(1) at (3,4)	[shape=circle,draw, ultra thick]	{$JOLASTEN$};
+\node(2) at (0,10)	[shape=circle,draw, ultra thick]	{$GALDUTA$};
+\node(3) at (6,10)	[shape=circle,draw, ultra thick]	{$IRABAZITA$};
+\node(4) at (-1,16)	[shape=circle,draw, ultra thick]	{$RESET$};
+\node(5) at (7,16)	[shape=circle,draw, ultra thick]	{$RESET\_BERRI$};
+\path [ultra thick, ->]
+  (0) edge node [below, preaction={fill, white}, yshift=25] {$\begin{array}{c}
    A\text{ pultsatu}\big\{ \\
    \text{DenboragailuaMartxanJarri();} \\
    \text{seg=0;}
   \end{array}$} (1)
-  (1) edge [bend right=30]  node [below, preaction={fill, white},yshift=20,xshift=20] {$\begin{array}{c}\text{seg==10} \big\{ \\ \text{GalduMezuaErakutsi();}\end{array}$} (2)
-  (1) edge [bend left=30]  node [below, preaction={fill, white},yshift=15,xshift=-20] {$\begin{array}{c}\text{Pantaila \&\& !KableOna(px, py)} \big\{ \\ \text{GalduMezuaErakutsi();}\end{array}$} (2)
-  (1) edge node [above, right, preaction={fill, white}, yshift=-7, xshift=-30] {$\begin{array}{c}\text{Pantaila \&\& KableOna(px, py)} \big\{ \\ \text{IrabaziMezuaErakutsi();}\end{array}$} (3)
-  (2) edge node [above, right] {Hola} (4)
+  (1) edge [bend right=50]  node [above, preaction={fill, white},yshift=-30] {$\begin{array}{c}\text{seg==10} \big\{ \\ \text{GalduMezuaErakutsi();}\end{array}$} (2)
+  (1) edge [bend left=30]  node [above, preaction={fill, white},xshift=0, yshift=-30] {$\begin{array}{c}\text{Pantaila \&\& !KableOna(px, py)} \big\{ \\ \text{GalduMezuaErakutsi();}\end{array}$} (2)
+  (1) edge [bend left=20] node [below, preaction={fill, white}, yshift=7, xshift=20] {$\begin{array}{c}\text{Pantaila \&\& KableOna(px, py)} \big\{ \\ \text{IrabaziMezuaErakutsi();}\end{array}$} (3)
   (2) edge node [above] {} (5)
   (3) edge node [above] {} (4)
-  (3) edge node [above, left] {Adios} (5)
+  (2) edge node [above, preaction={fill, white}, yshift=-40, xshift=20] {SakatutakoTekla()==A$\big\{$} (4)
+  (3) edge node [above, preaction={fill, white}, yshift=-30, xshift=-35] {$\text{SakatutakoTekla}()==B \big\{$} (5)
   
-  (4) edge [bend right=75]  node [below] {} (0)
-  (5) edge [bend left=75]   node [below] {} (0)
+  (4) edge [bend left=60]  node [above, preaction={fill, white}, yshift=100, xshift=50] {$\big\{$reset();} (0)
+  (5) edge [bend right=60]   node [above, preaction={fill, white}, yshift=100, xshift=-50] {$\left\{\begin{array}{l}\text{kable\_ona=rand()\%5;} \\ \text{reset();}\end{array}\right.$} (0)
+  (pseudo) edge [bend left=20] node [above] {$\begin{array}{c}\text{reset();}\\ \text{kable\_ona=rand()\%5;}\end{array}$} (0)
   %(0) edge [loop above]    node [above] {} ()
   ;
 \end{tikzpicture}
