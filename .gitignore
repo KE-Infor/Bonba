@@ -29,3 +29,8 @@ gfx/sprite/
 *.i*86
 *.x86_64
 *.hex
+
+*.aux
+*.log
+*.synctex.gz
+*.toc
