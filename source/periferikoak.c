@@ -9,8 +9,6 @@ periferikoak.c
 
 int tekla; //sakatutako tekla gordetzeko aldagaia
 
-
-
 int TeklaDetektatu()
 {
 	//TRUE itzultzen du teklaren bat sakatu dela detektatzen badu

@@ -13,9 +13,10 @@ periferikoak.c
 
 int EGOERA;
 
-void tekEten ()
+void tekEten()
 {
-	if (SakatutakoTekla() == A)
+	int tek = SakatutakoTekla();
+	if (tek == A)
 	{
 		if(EGOERA == EGOERA_HASIERA)
 		{
@@ -29,12 +30,12 @@ void tekEten ()
 			EGOERA = EGOERA_RESET_BERDIN;
 		}
 	}
-	else if (SakatutakoTekla() == B)
+	else if (tek == B)
 	{
 		if(EGOERA == EGOERA_GALDUTA || EGOERA == EGOERA_IRABAZITA)
 		{
 			ezabatu_pantaila();
-			EGOERA == EGOERA_RESET_BERRI;
+			EGOERA = EGOERA_RESET_BERRI;
 		}
 	}
 }

@@ -17,22 +17,22 @@ adibide batean oinarrituta.
 #include "egoera.h"
 #include "lagungarriak.h"
 
-#define OFFSET_Y 80
-#define OFFSET_X_GORRIA 65
-#define OFFSET_X_BERDEA 88
-#define OFFSET_X_URDINA 107
-#define OFFSET_X_MOREA 128
-#define OFFSET_X_HORIA 159
+#define OFFSET_Y		80
+#define OFFSET_X_GORRIA	65
+#define OFFSET_X_BERDEA	88
+#define OFFSET_X_URDINA	107
+#define OFFSET_X_MOREA	128
+#define OFFSET_X_HORIA	159
 
-#define X_MIN 71
-#define GORRIA_MAX 92
-#define BERDEA_MAX 109
-#define URDINA_MAX 133
-#define MOREA_MAX 163
-#define HORIA_MAX 187
+#define X_MIN			71
+#define GORRIA_MAX		92
+#define BERDEA_MAX		109
+#define URDINA_MAX		133
+#define MOREA_MAX		163
+#define HORIA_MAX		187
 
-#define Y_MIN 49
-#define Y_MAX 143
+#define Y_MIN			49
+#define Y_MAX			143
 
 int get_kable(int px, int py);
 char* kable_izena(int kablea);
@@ -40,7 +40,7 @@ void reset();
 void erakutsi_spritea(int kable);
 void init();
 
-int offseta[10] =
+int offseta[5] =
 {
 	OFFSET_X_GORRIA,
 	OFFSET_X_BERDEA,
@@ -150,11 +150,11 @@ int get_kable(int px, int py)
 	{
 		if (px > X_MIN && px < HORIA_MAX)
 		{
-			if (px < GORRIA_MAX) return GORRIA;
-			else if (px < BERDEA_MAX) return BERDEA;
-			else if (px < URDINA_MAX) return URDINA;
-			else if (px < MOREA_MAX) return MOREA;
-			else if (px < HORIA_MAX) return HORIA;
+			if (px < GORRIA_MAX)		return GORRIA;
+			else if (px < BERDEA_MAX)	return BERDEA;
+			else if (px < URDINA_MAX)	return URDINA;
+			else if (px < MOREA_MAX)	return MOREA;
+			else if (px < HORIA_MAX)	return HORIA;
 		}
 	}
 	return -1;
@@ -162,10 +162,10 @@ int get_kable(int px, int py)
 
 char* kable_izena(int kablea)
 {
-	if (kablea == GORRIA) return "GORRIA";
-	else if (kablea == BERDEA) return "BERDEA";
-	else if (kablea == URDINA) return "URDINA";
-	else if (kablea == MOREA) return "MOREA";
-	else if (kablea == HORIA) return "HORIA";
-	else return "ERROREA!";
+	if (kablea == GORRIA)		return "GORRIA";
+	else if (kablea == BERDEA)	return "BERDEA";
+	else if (kablea == URDINA)	return "URDINA";
+	else if (kablea == MOREA)	return "MOREA";
+	else if (kablea == HORIA)	return "HORIA";
+	else						return "ERROREA!";
 }
