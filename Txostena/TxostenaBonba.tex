@@ -53,11 +53,7 @@ Ebazpenerako pentsatu dugun atea zeran datza: Ukimen pantailan bonba bat agertuk
 \node(4) at (-1,16)	[shape=circle,draw, ultra thick]	{$RESET$};
 \node(5) at (7,16)	[shape=circle,draw, ultra thick]	{$RESET\_BERRI$};
 \path [ultra thick, ->]
-  (0) edge node [below, preaction={fill, white}, yshift=25] {$\begin{array}{c}
-   A\text{ pultsatu}\big\{ \\
-   \text{DenboragailuaMartxanJarri();} \\
-   \text{seg=0;}
-  \end{array}$} (1)
+  (0) edge node [below, preaction={fill, white}, yshift=25] {$\begin{array}{c}A\text{ pultsatu}\big\{ \\ \text{DenboragailuaMartxanJarri();} \\ \text{seg=0;}\end{array}$} (1)
   (1) edge [bend right=50]  node [above, preaction={fill, white},yshift=-30] {$\begin{array}{c}\text{seg==10} \big\{ \\ \text{GalduMezuaErakutsi();}\end{array}$} (2)
   (1) edge [bend left=30]  node [above, preaction={fill, white},xshift=0, yshift=-30] {$\begin{array}{c}\text{Pantaila \&\& !KableOna(px, py)} \big\{ \\ \text{GalduMezuaErakutsi();}\end{array}$} (2)
   (1) edge [bend left=20] node [below, preaction={fill, white}, yshift=7, xshift=20] {$\begin{array}{c}\text{Pantaila \&\& KableOna(px, py)} \big\{ \\ \text{IrabaziMezuaErakutsi();}\end{array}$} (3)
